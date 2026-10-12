@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domínio da Pontuação — Laboratório de Técnicas de Comunicação</title>
+<style>
+:root{--bg:#0b1020;--panel:#121a2e;--panel2:#17223b;--text:#eef3ff;--muted:#a9b6d3;--line:#2b3858;--gold:#ffd166;--green:#61e6a8;--red:#ff7b8b;--blue:#86b7ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top right,#182746 0,#0b1020 45%);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{padding:38px 20px 26px;max-width:1180px;margin:auto}header .tag{color:var(--gold);font-weight:800;text-transform:uppercase;letter-spacing:.13em;font-size:.78rem}h1{font-size:clamp(2rem,5vw,3.7rem);line-height:1.08;margin:.5rem 0 1rem}header p{max-width:780px;color:var(--muted);font-size:1.08rem}
+.wrap{max-width:1180px;margin:auto;padding:0 20px 60px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:12px 0 24px}.stat,.card{background:linear-gradient(145deg,rgba(23,34,59,.96),rgba(18,26,46,.96));border:1px solid var(--line);border-radius:18px}.stat{padding:15px}.stat strong{display:block;font-size:1.5rem;color:var(--gold)}.stat span{color:var(--muted);font-size:.86rem}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}.tab{background:#18233b;color:var(--text);border:1px solid var(--line);padding:10px 14px;border-radius:999px;cursor:pointer;font-weight:700}.tab.active{background:var(--gold);color:#172033;border-color:var(--gold)}
+.grid{display:grid;grid-template-columns:280px 1fr;gap:18px}.card{padding:22px}.sidebar h2,.card h2{margin-top:0}.sidebar p,.muted{color:var(--muted)}.sidebtn{display:block;width:100%;text-align:left;background:transparent;color:var(--text);border:1px solid transparent;border-radius:10px;padding:10px 12px;cursor:pointer;margin:4px 0}.sidebtn:hover,.sidebtn.active{background:var(--panel2);border-color:var(--line)}.pill{display:inline-block;padding:3px 9px;border-radius:999px;background:#263653;color:var(--blue);font-size:.78rem;font-weight:800}.lesson{margin:14px 0;padding:14px 16px;border-left:3px solid var(--gold);background:#0e1629;border-radius:0 12px 12px 0}.lesson strong{color:var(--gold)}.example{padding:12px 14px;border:1px solid var(--line);border-radius:12px;margin:10px 0;background:#0d1527}.question{padding:18px 0;border-bottom:1px solid var(--line)}.question:last-child{border-bottom:0}.qtitle{font-weight:800;font-size:1.05rem}.options{display:grid;gap:8px;margin:12px 0}.option{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:#0d1527}.option:hover{border-color:var(--blue)}.option input{margin-top:6px;accent-color:var(--gold)}button{font:inherit}.primary,.secondary{border:0;border-radius:11px;padding:12px 17px;font-weight:800;cursor:pointer}.primary{background:var(--gold);color:#172033}.secondary{background:#263653;color:var(--text);border:1px solid var(--line)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.feedback{padding:12px 14px;border-radius:10px;margin-top:10px;display:none}.feedback.good{display:block;background:#123b32;color:#a9f6d4;border:1px solid #246c58}.feedback.bad{display:block;background:#3d202b;color:#ffc1ca;border:1px solid #783746}.small{font-size:.88rem;color:var(--muted)}.hidden{display:none!important}.fill{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#0d1527;color:var(--text);font:inherit}.progress{height:8px;background:#263653;border-radius:20px;overflow:hidden;margin:10px 0 18px}.progress div{height:100%;background:var(--green);width:0;transition:width .25s}.review-item{padding:12px 0;border-bottom:1px solid var(--line)}footer{text-align:center;color:var(--muted);padding:24px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}header{padding-top:26px}.card{padding:17px}}
+
+/* PREMIUM EDITION — clean interface, no emoji icons */
+:root{--bg:#080d18;--panel:#101827;--panel2:#182438;--text:#f4f1e9;--muted:#a6b0c1;--line:#2a3548;--gold:#d9b873;--green:#75d6b0;--red:#e58b94;--blue:#9bbce8}
+body{background:radial-gradient(ellipse at 85% -10%,rgba(217,184,115,.13),transparent 34%),linear-gradient(145deg,#080d18 0%,#0b1220 58%,#101827 100%);font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;letter-spacing:.005em}
+header{padding-top:58px;padding-bottom:34px}
+header .tag{color:var(--gold);font-size:.72rem;letter-spacing:.2em}
+h1{font-weight:750;letter-spacing:-.045em;max-width:900px}
+header p{line-height:1.8;color:#b5becc}
+.wrap{max-width:1240px}
+.stat,.card{background:linear-gradient(145deg,rgba(19,29,46,.97),rgba(13,21,35,.98));border-color:rgba(217,184,115,.17);box-shadow:0 18px 50px rgba(0,0,0,.16)}
+.stat{border-radius:14px;padding:18px 19px;position:relative;overflow:hidden}
+.stat:before{content:"";position:absolute;top:0;left:0;width:42px;height:2px;background:var(--gold)}
+.stat strong{font-size:1.7rem;color:var(--gold);letter-spacing:-.04em}
+nav{gap:9px;margin:25px 0 22px}
+.tab{border-radius:9px;padding:11px 16px;background:rgba(22,33,52,.85);border-color:#303d52;transition:background .2s,border-color .2s,transform .2s}
+.tab:hover{border-color:var(--gold);transform:translateY(-1px)}
+.tab.active{background:var(--gold);color:#111827;border-color:var(--gold)}
+.grid{grid-template-columns:270px minmax(0,1fr);gap:20px}
+.card{border-radius:15px;padding:25px}
+.sidebar h2,.card h2{letter-spacing:-.025em}
+.sidebtn{padding:11px 13px;border-radius:8px;color:#c8d0dd;transition:all .18s}
+.sidebtn:hover,.sidebtn.active{background:#1b2940;border-color:rgba(217,184,115,.35);color:#fff}
+.pill{background:rgba(217,184,115,.12);color:var(--gold);border:1px solid rgba(217,184,115,.25);border-radius:5px;letter-spacing:.09em;font-size:.68rem;padding:5px 9px}
+.lesson{background:rgba(8,14,25,.72);border-left-color:var(--gold);border-radius:0 9px 9px 0;padding:16px 18px;margin:13px 0}
+.lesson strong{color:var(--gold)}
+.example,.option,.fill{background:#0b1321;border-color:#2b394e;border-radius:9px}
+.option{padding:13px 14px;transition:border-color .18s,background .18s}
+.option:hover{background:#121f32;border-color:var(--gold)}
+.primary,.secondary{border-radius:8px;padding:12px 17px;transition:transform .18s,filter .18s}
+.primary{background:linear-gradient(135deg,#e3c889,#c9a65d);color:#101827;box-shadow:0 6px 18px rgba(201,166,93,.12)}
+.primary:hover,.secondary:hover{transform:translateY(-1px);filter:brightness(1.06)}
+.secondary{background:#1a2639;border-color:#344258}
+.progress{background:#202c3f;height:6px}
+.progress div{background:linear-gradient(90deg,#b99a5a,#e4ce9a)}
+.feedback{border-radius:8px}
+footer{border-top:1px solid rgba(217,184,115,.12);font-size:.85rem;margin-top:18px}
+@media(max-width:800px){header{padding-top:35px}.grid{grid-template-columns:1fr}.card{padding:19px}.stats{gap:9px}.tab{flex:1 1 auto}}
+
+</style>
+</head>
+<body>
+<header>
+ <div class="tag">ISUTC • Técnicas de Comunicação</div>
+ <h1>Domínio da <span style="color:var(--gold)">Língua Escrita</span></h1>
+ <p>Uma plataforma de estudo de Técnicas de Comunicação: aprende pontuação e acentuação gráfica, pratica com exercícios da ficha e avança do nível básico ao universitário.</p>
+</header>
+<div class="wrap">
+ <section class="stats">
+  <div class="stat"><strong id="totalStat">40+</strong><span>questões de treino</span></div>
+  <div class="stat"><strong id="doneStat">0</strong><span>respostas corrigidas nesta sessão</span></div>
+  <div class="stat"><strong id="scoreStat">0%</strong><span>aproveitamento acumulado</span></div>
+  <div class="stat"><strong id="levelStat">Básico</strong><span>nível atual</span></div>
+ </section>
+ <nav>
+  <button class="tab active" data-tab="learn">Aprender</button>
+  <button class="tab" data-tab="accent">Acentuação gráfica</button>
+  <button class="tab" data-tab="practice">Exercícios de pontuação</button>
+  <button class="tab" data-tab="text">Textos completos</button>
+  <button class="tab" data-tab="challenge">Desafio universitário</button>
+  <button class="tab" data-tab="review">Resultados</button>
+ </nav>
+ <div class="grid">
+  <aside class="card sidebar" id="side">
+   <h2>Guia de estudo</h2>
+   <p>Escolhe um tema. Memoriza a regra e observa os exemplos.</p>
+   <button class="sidebtn active" data-lesson="ponto">1. Ponto final</button>
+   <button class="sidebtn" data-lesson="virgula">2. Vírgula: 11 usos</button>
+   <button class="sidebtn" data-lesson="pv">3. Ponto e vírgula</button>
+   <button class="sidebtn" data-lesson="dois">4. Dois-pontos</button>
+   <button class="sidebtn" data-lesson="exclamacao">5. Exclamação</button>
+   <button class="sidebtn" data-lesson="traco">6. Travessão</button>
+   <button class="sidebtn" data-lesson="aspas">7. Aspas</button>
+   <button class="sidebtn" data-lesson="erros">8. Erros frequentes</button>
+  </aside>
+  <main class="card">
+   <section id="learnPanel">
+    <span class="pill">GUIA TEÓRICO</span>
+    <div id="lessonContent"></div>
+   </section>
+   <section id="accentPanel" class="hidden">
+    <span class="pill">GUIA TEÓRICO</span><h2>Regras de acentuação gráfica</h2>
+    <p class="muted">Conteúdo alinhado com a ficha prática de Técnicas de Comunicação. Aprende primeiro a identificar a sílaba tónica e só depois aplica a regra.</p>
+    <div class="lesson"><strong>1. Oxítonas (agudas)</strong><p>A sílaba tónica é a última. Acentuam-se, em regra, as terminadas em <b>a(s), e(s), o(s), em, ens</b>: <i>cajá, café, jiló, armazém, parabéns</i>. Também se acentuam ditongos abertos tônicos <i>éi, éu, ói</i> em palavras oxítonas: <i>papéis, chapéu, herói</i>.</p></div>
+    <div class="lesson"><strong>2. Paroxítonas (graves)</strong><p>A sílaba tónica é a penúltima. Acentuam-se as que terminam, entre outras, em <b>l, n, r, x, ps, ã(s), ão(s), i(s), us, um/uns, om/ons</b>, ditongo oral, ou sequência equivalente: <i>fácil, hífen, açúcar, tórax, bíceps, órfã, órgão, júri, vírus, álbum, prótons, história, possível, fósseis</i>. Muitas paroxítonas terminadas em <i>a, e, o, em, ens</i> não levam acento: <i>casa, parede, livro, jovem, homens</i>.</p></div>
+    <div class="lesson"><strong>3. Proparoxítonas (esdrúxulas)</strong><p>A sílaba tónica é a antepenúltima. <b>Todas são acentuadas</b>: <i>África, lâmpada, método, pêssego, próximo, mínimo, último, relâmpago, romântico</i>.</p></div>
+    <div class="lesson"><strong>4. Monossílabos tónicos</strong><p>Acentuam-se, em regra, os terminados em <b>a(s), e(s), o(s)</b>: <i>pá, má, pé, pés, pó, nós</i>. Também há acento em ditongos abertos tônicos: <i>céu, réis, dói</i>.</p></div>
+    <div class="lesson"><strong>5. Hiato</strong><p>O <i>i</i> e o <i>u</i> tônicos levam acento quando ficam sozinhos na sílaba ou seguidos de <i>s</i>, formando hiato, observadas as condições da regra: <i>saída, saúde, baú, raízes, país</i>. Compare <i>raiz</i> (sem acento) e <i>raízes</i> (com acento).</p></div>
+    <div class="lesson"><strong>6. Acentos diferenciais e acordo ortográfico</strong><p>Algumas formas mantêm acento para distinguir sentidos ou formas verbais, como <i>pôde/pode</i> e <i>pôr/por</i>. Na ortografia atual, escrevem-se <i>ideia, assembleia, boia, asteroide, voo</i>, sem acento. A ficha pode conter grafias antigas; nas respostas, segue a norma ortográfica em vigor, salvo indicação do docente.</p></div>
+    <div class="example"><strong>Método rápido para o teste</strong><br>1. Divide a palavra em sílabas. 2. Descobre a sílaba tónica. 3. Classifica: oxítona, paroxítona ou proparoxítona. 4. Observa a terminação e aplica a regra. 5. Confirma se é um caso especial, como hiato ou ditongo aberto.</div>
+    <h2 style="margin-top:28px">Treino de acentuação</h2><p class="muted">Seleciona uma resposta e corrige para ver a explicação.</p>
+    <div class="progress"><div id="accentProgress"></div></div><div id="accentQuizArea"></div>
+    <div class="actions"><button class="primary" id="accentCheckBtn">Corrigir resposta</button><button class="secondary" id="accentNextBtn">Próxima questão</button></div><div id="accentFeedback" class="feedback"></div>
+   </section>
+   <section id="practicePanel" class="hidden">
+    <span class="pill">TREINO ADAPTATIVO</span><h2>Exercícios de escolha múltipla</h2>
+    <p class="muted">Escolhe o nível e responde. A correção explica a regra aplicada.</p>
+    <label for="levelSelect">Nível:</label>
+    <select id="levelSelect" class="fill" style="margin:8px 0 16px"><option value="all">Todos os níveis</option><option value="Básico">Básico</option><option value="Intermédio">Intermédio</option><option value="Avançado">Avançado</option><option value="Universitário">Universitário</option></select>
+    <div class="progress"><div id="progressBar"></div></div><div id="quizArea"></div>
+    <div class="actions"><button class="primary" id="checkBtn">Corrigir resposta</button><button class="secondary" id="nextBtn">Próxima questão →</button><button class="secondary" id="shuffleBtn">Misturar questões</button></div>
+    <div id="quizFeedback" class="feedback"></div>
+   </section>
+   <section id="textPanel" class="hidden">
+    <span class="pill">PONTUAÇÃO EM CONTEXTO</span><h2>Textos completos</h2>
+    <p class="muted">Insere os sinais em falta. Depois compara com uma versão possível e lê a explicação.</p>
+    <div id="textExercises"></div>
+   </section>
+   <section id="challengePanel" class="hidden">
+    <span class="pill">NÍVEL UNIVERSITÁRIO</span><h2>Desafio de análise e revisão</h2>
+    <p>Analisa ambiguidade, estrutura sintática, enumeração complexa e pontuação editorial. Estas questões são exercícios de aprofundamento; nem todos os detalhes pertencem literalmente aos slides da disciplina.</p>
+    <div id="challengeArea"></div>
+   </section>
+   <section id="reviewPanel" class="hidden">
+    <span class="pill">O TEU DESEMPENHO</span><h2>Resultados desta sessão</h2>
+    <div id="reviewContent"><p class="muted">Ainda não corrigiste nenhuma questão. Vai a Exercícios para começar.</p></div>
+    <div class="actions"><button class="secondary" id="resetBtn">Reiniciar resultados</button></div>
+   </section>
+  </main>
+ </div>
+</div>
+<footer>Laboratório de estudo • Feito para praticar no computador ou telemóvel • O progresso é guardado apenas nesta página enquanto a sessão estiver aberta.</footer>
+<script>
+const lessons={
+ponto:{title:"1. Ponto final (.)",intro:"Encerra um enunciado declarativo, marca o fim de uma ideia e pode aparecer em abreviaturas.",rules:[
+["Terminar uma afirmação","O estudante preparou-se para o teste."],
+["Separar ideias completas","O trânsito estava congestionado. Os passageiros chegaram atrasados."],
+["Abreviaturas","Sr. (senhor), Exmo. (Excelentíssimo), Pg. (página). A forma de pontuar siglas pode variar conforme a convenção adotada."]
+],tip:"No teste, descreve a função: encerrar um enunciado ou marcar o fim de uma ideia."},
+virgula:{title:"2. Vírgula (,): regras essenciais",intro:"Marca separações dentro do enunciado. Não é apenas uma pausa para respirar: a estrutura sintática determina o uso.",rules:[
+["1. Vocativo","Marília, vá à padaria. / Professor, posso entrar? A palavra usada para chamar alguém fica separada."],
+["2. Aposto explicativo","Camila, minha filha caçula, ofereceu-me um relógio. A expressão explica quem é Camila."],
+["3. Enumeração","Comprei cadernos, canetas, lápis e livros. Em enumerações simples, normalmente não se põe vírgula antes do último «e»."],
+["4. Conectores adversativos","O resultado, porém, não foi suficiente. / Estudei, mas tive dificuldades. A pontuação depende da posição e da estrutura."],
+["5. Expressões explicativas/conclusivas e adjuntos","É um adiamento, ou seja, será noutra data. / Estudou; portanto, está preparado. / Educadamente, pediu ajuda."],
+["6. Subordinada anteposta","Quando cheguei, o professor já estava na sala. / Se estudares, poderás melhorar."],
+["7. Gerundiva/participial no início","Chegando à faculdade, dirigiu-se à sala. / Cansada da viagem, foi descansar."],
+["8. Relativa explicativa","O professor, que chegou atrasado, pediu desculpas. A informação entre vírgulas é acessória; compare: «Os alunos que estudaram passaram»."],
+["9. Oração intercalada","O professor, quando chegou, iniciou a aula."],
+["10. Orações assindéticas","Cheguei cedo, sentei-me, abri o caderno. As orações aparecem sem conjunção."],
+["11. Sim/não independentes","Sim, compreendi. / Não, ainda não terminei."]
+],tip:"Nunca separes automaticamente o sujeito do verbo: «Os estudantes do primeiro ano chegaram» (sem vírgula entre sujeito e verbo)."},
+pv:{title:"3. Ponto e vírgula (;)",intro:"Indica uma separação mais forte do que a vírgula e menos definitiva do que o ponto final.",rules:[
+["Orações longas com vírgulas internas","Os médicos organizavam os materiais, os medicamentos e os registos; os voluntários, por sua vez, preparavam as refeições."],
+["Partes paralelas de uma enumeração complexa","Participaram Ana, coordenadora; Luís, relator; e Marta, tesoureira."],
+["Antes de conectores em períodos complexos","Os dados são limitados; contudo, permitem formular uma hipótese."]
+],tip:"É especialmente útil quando uma vírgula já não chega para distinguir claramente os blocos da frase."},
+dois:{title:"4. Dois-pontos (:)",intro:"Anunciam algo que vem a seguir: uma fala, uma citação, uma lista ou uma explicação.",rules:[
+["Discurso direto","O professor anunciou: — O teste começa às oito."],
+["Citação","O autor escreveu: «A leitura abre caminhos.»"],
+["Enumeração","Levei três materiais: caderno, caneta e manual."],
+["Explicação ou causa","Não fui à aula: estava doente."]
+],tip:"Memoriza: fala, citação, lista, explicação. Os dois-pontos anunciam o conteúdo seguinte."},
+exclamacao:{title:"5. Ponto de exclamação (!)",intro:"Marca uma frase exclamativa e pode exprimir admiração, entusiasmo, ironia, dúvida, dor ou uma ordem expressiva.",rules:[
+["Admiração","Que vista magnífica!"],
+["Dor ou surpresa","Ai! / Não acredito!"],
+["Entusiasmo","Conseguimos terminar o trabalho!"]
+],tip:"O sinal não significa sempre alegria; o contexto determina o sentimento."},
+traco:{title:"6. Travessão (—)",intro:"Pode introduzir falas no discurso direto, marcar a intervenção de um narrador e destacar uma expressão.",rules:[
+["Discurso direto","— Quando é o teste? — perguntou a estudante."],
+["Expressão intercalada","O relatório — revisto pela docente — foi entregue hoje."],
+["Distinção","O travessão (—) é diferente do hífen (-)."]
+],tip:"Em diálogos, o travessão costuma marcar a entrada de cada fala."},
+aspas:{title:"7. Aspas (« »)",intro:"Delimitam citações ou assinalam uma palavra/expressão mencionada como tal, conforme o contexto editorial.",rules:[
+["Citação","O professor disse: «A pontuação é essencial.»"],
+["Uso metalinguístico","A palavra «porém» introduz frequentemente contraste."]
+],tip:"Abre e fecha as aspas; a citação deve corresponder às palavras que se pretende reproduzir."},
+erros:{title:"8. Erros frequentes",intro:"Pontuar bem depende de reconhecer a estrutura da frase, não apenas de ouvir pausas.",rules:[
+["Não separar sujeito e verbo","Incorreto: «Os estudantes, chegaram cedo.» Correto: «Os estudantes chegaram cedo.»"],
+["Vocativo vs. aposto","«Camila, vem cá.» (vocativo) / «Camila, minha irmã, chegou.» (aposto)."],
+["Explicativa vs. restritiva","«Os candidatos, que estudaram, passaram» sugere uma informação explicativa sobre todos os candidatos em foco. «Os candidatos que estudaram passaram» identifica um subconjunto."],
+["Enumeração simples vs. complexa","Simples: «Comprei arroz, feijão e óleo.» Complexa: «Vieram Ana, da secretaria; Paulo, do laboratório; e Rui, da biblioteca.»"]
+],tip:"Antes de pôr uma vírgula, identifica o sujeito, o verbo, os conectores e as expressões intercaladas."}
+};
+const questions=[
+{l:"Básico",q:"«Marília, vá à padaria comprar pães.» A vírgula separa:",o:["Um aposto","Um vocativo","Uma citação","Uma enumeração"],a:1,e:"Marília é a pessoa a quem se dirige a ordem; é vocativo."},
+{l:"Básico",q:"«Camila, minha filha caçula, ofereceu-me um relógio.» As vírgulas isolam:",o:["Um vocativo","Um aposto explicativo","Um conector adversativo","Uma oração causal"],a:1,e:"«Minha filha caçula» explica quem é Camila; é aposto."},
+{l:"Básico",q:"Escolhe a enumeração pontuada corretamente.",o:["Trouxe: pão, leite e arroz.","Trouxe pão, leite e arroz.","Trouxe pão leite, e arroz.","Trouxe, pão, leite e arroz."],a:1,e:"Numa enumeração simples, separam-se os elementos por vírgulas e normalmente não se põe vírgula antes do último «e»."},
+{l:"Básico",q:"Qual frase utiliza corretamente os dois-pontos para anunciar uma lista?",o:["Preciso de: um livro, uma caneta.","Preciso de três coisas: um livro, uma caneta e um caderno.","Preciso: de três coisas um livro.","Preciso de três: coisas um livro."],a:1,e:"Os dois-pontos anunciam a enumeração."},
+{l:"Básico",q:"Que sinal costuma terminar uma afirmação declarativa?",o:["Vírgula","Dois-pontos","Ponto final","Travessão"],a:2,e:"O ponto final encerra o enunciado declarativo."},
+{l:"Básico",q:"Qual sinal pode expressar admiração ou dor?",o:["Aspas","Ponto de exclamação","Ponto e vírgula","Vírgula"],a:1,e:"O ponto de exclamação pode exprimir vários sentimentos, incluindo admiração e dor."},
+{l:"Básico",q:"Qual sinal é usado para introduzir falas em muitos diálogos escritos?",o:["Travessão","Ponto final","Vírgula","Ponto e vírgula"],a:0,e:"O travessão introduz a fala no discurso direto."},
+{l:"Básico",q:"Em «O autor escreveu: «A leitura transforma.»», as aspas delimitam:",o:["Uma enumeração","Uma citação","Um vocativo","Uma oração causal"],a:1,e:"As aspas assinalam as palavras citadas."},
+{l:"Básico",q:"Escolhe a frase corretamente pontuada.",o:["Os estudantes, chegaram cedo.","Os estudantes chegaram cedo.","Os estudantes chegaram, cedo.","Os, estudantes chegaram cedo."],a:1,e:"Não se deve separar o sujeito do verbo por uma vírgula sem justificação sintática."},
+{l:"Básico",q:"«Sim, compreendi a regra.» A vírgula separa:",o:["Uma resposta afirmativa independente","O sujeito do verbo","Uma enumeração","Uma citação"],a:0,e:"«Sim» funciona como resposta independente."},
+{l:"Intermédio",q:"«Quando cheguei à sala, a aula já tinha começado.» A vírgula separa:",o:["Uma oração subordinada anteposta da principal","Um vocativo","Uma citação","Um aposto"],a:0,e:"A oração temporal «Quando cheguei à sala» antecede a principal e fica separada por vírgula."},
+{l:"Intermédio",q:"«O resultado, porém, não foi suficiente.» As vírgulas isolam:",o:["O sujeito","Um conector adversativo intercalado","Uma enumeração","O predicado inteiro"],a:1,e:"«Porém» é um conector adversativo intercalado."},
+{l:"Intermédio",q:"«Cheguei cedo, abri o livro, comecei a estudar.» As vírgulas separam:",o:["Orações coordenadas assindéticas","Citações","Vocativos","Orações relativas restritivas"],a:0,e:"As orações independentes aparecem sem conjunção; são coordenadas assindéticas."},
+{l:"Intermédio",q:"Em «O professor, que chegou atrasado, pediu desculpas», a oração entre vírgulas é:",o:["Relativa restritiva","Relativa explicativa","Vocativo","Enumeração"],a:1,e:"A oração acrescenta informação explicativa sobre o professor."},
+{l:"Intermédio",q:"Escolhe a frase com oração intercalada corretamente isolada.",o:["O professor quando, chegou iniciou a aula.","O professor, quando chegou, iniciou a aula.","O professor quando chegou, iniciou, a aula.","O professor, quando, chegou iniciou a aula."],a:1,e:"A oração intercalada «quando chegou» fica entre duas vírgulas."},
+{l:"Intermédio",q:"Qual opção usa corretamente o ponto e vírgula para separar blocos complexos?",o:["Participaram Ana, coordenadora; Luís, relator; e Marta, tesoureira.","Participaram; Ana coordenadora Luís relator.","Participaram Ana; coordenadora Luís; relator Marta tesoureira.","Participaram Ana, coordenadora, Luís, relator, e Marta, tesoureira."],a:0,e:"O ponto e vírgula separa itens que já contêm vírgulas internas."},
+{l:"Intermédio",q:"«Não fui à aula: estava doente.» Os dois-pontos introduzem:",o:["Uma pergunta","Uma explicação/causa","Um vocativo","Uma exclamação"],a:1,e:"A segunda oração explica a razão da primeira."},
+{l:"Intermédio",q:"Escolhe a frase em que «mas» está pontuado de forma adequada.",o:["Queria sair mas, estava a chover.","Queria sair, mas estava a chover.","Queria, sair mas estava a chover.","Queria sair mas estava, a chover."],a:1,e:"A vírgula separa as orações coordenadas adversativas nesta construção."},
+{l:"Intermédio",q:"«Cansada da viagem, Joana foi dormir.» A vírgula separa:",o:["Uma expressão participial inicial","Um vocativo","Uma citação","O sujeito do verbo"],a:0,e:"«Cansada da viagem» é uma expressão participial/adjetival inicial."},
+{l:"Intermédio",q:"Qual é a diferença principal entre «Camila, vem cá» e «Camila, minha irmã, chegou»?",o:["Não há diferença","Na primeira, «Camila» é vocativo; na segunda, há aposto explicativo","Na primeira há aposto; na segunda, vocativo","Ambas contêm enumeração"],a:1,e:"Na primeira, chama-se Camila; na segunda, «minha irmã» explica quem é Camila."},
+{l:"Avançado",q:"Qual frase evita corretamente separar sujeito e predicado?",o:["A análise dos resultados, revelou falhas.","A análise dos resultados revelou falhas.","A análise, dos resultados revelou falhas.","A análise dos resultados revelou, falhas."],a:1,e:"O sujeito completo «A análise dos resultados» liga-se diretamente ao verbo «revelou»."},
+{l:"Avançado",q:"Qual par mostra a diferença entre oração relativa explicativa e restritiva?",o:["A) Os alunos, que estudaram, passaram. B) Os alunos que estudaram passaram.","A) Os alunos que, estudaram passaram. B) Os alunos, que estudaram passaram.","A) Os alunos que estudaram, passaram. B) Os alunos, que estudaram, passaram.","Não há diferença possível."],a:0,e:"Sem vírgulas, «que estudaram» identifica quais alunos; com vírgulas, a informação é apresentada como explicativa."},
+{l:"Avançado",q:"Qual pontuação melhor separa itens com explicações internas?",o:["Foram Ana da secretaria Paulo do laboratório e Rui da biblioteca.","Foram: Ana, da secretaria; Paulo, do laboratório; e Rui, da biblioteca.","Foram Ana; da secretaria Paulo; do laboratório Rui.","Foram, Ana, da secretaria, Paulo, do laboratório, e Rui."],a:1,e:"Dois-pontos anunciam a lista; ponto e vírgula separa cada item que contém vírgula interna."},
+{l:"Avançado",q:"«O plano era ambicioso; contudo, os recursos eram limitados.» O ponto e vírgula é adequado porque:",o:["Marca uma pergunta","Separa duas orações relacionadas e o conector inicia a segunda","Introduz uma citação","Separa o vocativo"],a:1,e:"O ponto e vírgula cria uma separação mais forte entre orações relacionadas; «contudo» introduz contraste."},
+{l:"Avançado",q:"Qual frase pontua adequadamente a expressão conclusiva intercalada?",o:["O prazo terminou portanto, entregámos o trabalho.","O prazo terminou; entregámos, portanto, o trabalho.","O prazo, terminou entregámos portanto o trabalho.","O prazo terminou entregámos portanto, o trabalho."],a:1,e:"O ponto e vírgula separa as orações e «portanto» fica isolado no interior da segunda."},
+{l:"Avançado",q:"Qual opção pontua corretamente uma fala seguida de indicação do narrador?",o:["— Não sei. — respondeu ela.","— Não sei — respondeu ela.","— Não sei, respondeu ela.","«— Não sei, respondeu ela.»"],a:1,e:"No padrão comum de diálogo, o travessão separa a fala da indicação do narrador; a pontuação exata depende da construção."},
+{l:"Universitário",q:"Qual frase apresenta pontuação mais adequada numa enumeração com elementos complexos?",o:["O comité ouviu Ana, diretora financeira; Rui, responsável técnico; e Sara, relatora.","O comité ouviu Ana, diretora financeira, Rui, responsável técnico e Sara, relatora.","O comité ouviu: Ana diretora financeira Rui responsável técnico Sara relatora.","O comité ouviu Ana; diretora financeira, Rui; responsável técnico."],a:0,e:"Cada item inclui uma vírgula explicativa; o ponto e vírgula distingue os itens complexos."},
+{l:"Universitário",q:"Qual análise descreve melhor «Os candidatos que apresentaram recurso serão ouvidos»?",o:["As vírgulas são obrigatórias em qualquer oração com «que».","A oração sem vírgulas restringe quais candidatos serão ouvidos.","A frase está necessariamente incorreta.","«Que apresentaram recurso» é vocativo."],a:1,e:"A oração relativa restritiva delimita o conjunto de candidatos. Não se isola por vírgulas."},
+{l:"Universitário",q:"Escolhe a opção em que o uso de vírgulas NÃO cria separação indevida entre sujeito e verbo.",o:["O conjunto de medidas propostas, foi aprovado.","A diretora do departamento, anunciou o resultado.","Embora a amostra fosse pequena, os resultados foram consistentes.","O relatório final, apresentou conclusões."],a:2,e:"A vírgula separa a oração subordinada concessiva anteposta da oração principal; as outras opções separam indevidamente sujeito e verbo."},
+{l:"Universitário",q:"Qual pontuação torna mais clara a estrutura da frase?",o:["A equipa analisou os dados recolhidos em campo, os técnicos verificaram os sensores, os investigadores compararam os modelos.","A equipa analisou os dados recolhidos em campo; os técnicos verificaram os sensores; os investigadores compararam os modelos.","A equipa; analisou os dados recolhidos em campo os técnicos; verificaram os sensores.","A equipa analisou; os dados recolhidos em campo os técnicos verificaram; os modelos."],a:1,e:"O ponto e vírgula separa blocos de orações coordenadas, reduzindo a ambiguidade numa sequência longa."},
+{l:"Universitário",q:"Em «Afirmou, sem apresentar provas, que a conclusão era definitiva», as vírgulas isolam:",o:["O sujeito","Uma expressão intercalada","Uma citação direta","Uma oração relativa restritiva"],a:1,e:"«Sem apresentar provas» é uma expressão intercalada que pode ser isolada por vírgulas."},
+{l:"Universitário",q:"Qual frase usa dois-pontos de modo mais claro?",o:["A conclusão é simples: os dados não sustentam a hipótese.","A conclusão: é simples os dados não sustentam a hipótese.","A conclusão é: simples os dados não sustentam a hipótese.","A conclusão é simples os dados: não sustentam a hipótese."],a:0,e:"Os dois-pontos introduzem uma explicação que desenvolve a afirmação anterior."},
+{l:"Universitário",q:"Qual afirmação sobre pontuação é a mais correta?",o:["A vírgula marca sempre uma pausa respiratória, independentemente da sintaxe.","Toda oração iniciada por «que» deve ser isolada por vírgulas.","A pontuação depende da estrutura sintática, do sentido e das convenções textuais.","O ponto e vírgula pode substituir qualquer sinal sem mudar o sentido."],a:2,e:"A pontuação é orientada pela sintaxe, pelo sentido e pelas convenções de escrita; não é apenas uma transcrição de pausas."},
+{l:"Universitário",q:"Escolhe a opção que melhor pontua a citação introduzida pelo narrador.",o:["A investigadora concluiu «os resultados são preliminares».","A investigadora concluiu: «Os resultados são preliminares.»","A investigadora: concluiu os resultados são preliminares.","A investigadora concluiu; «os resultados são preliminares»"],a:1,e:"Os dois-pontos introduzem a citação e as aspas delimitam as palavras citadas."}
+];
+const sourceExercises=[
+{q:"Na ficha: «Marília, vá à padaria comprar pães para o lanche.» Qual regra justifica a vírgula?",o:["Vocativo","Aposto","Enumeração","Conector"],a:0,e:"É vocativo: Marília é a pessoa chamada."},
+{q:"Na ficha: «Camila, minha filha caçula, presenteou-me com este relógio.»",o:["Vocativo","Aposto explicativo","Orações assindéticas","Adversativa"],a:1,e:"«Minha filha caçula» explica quem é Camila: aposto explicativo."},
+{q:"Na ficha: «Meus bolos prediletos são os de chocolate, coco, doce de leite e nata com morangos.»",o:["Enumeração","Vocativo","Oração intercalada","Conclusão"],a:0,e:"A vírgula separa elementos enumerados."},
+{q:"Na ficha: «Faça um bolo de chocolate a altura, ou melhor, contendo todos os ingredientes...»",o:["Expressão retificativa/intercalada","Vocativo","Oração temporal","Citação"],a:0,e:"«Ou melhor» retifica a expressão anterior e fica isolado por vírgulas."},
+{q:"Na ficha: «Os deputados não explicaram, porém, o porquê de tantas faltas.»",o:["Conector adversativo intercalado","Aposto","Enumeração","Discurso direto"],a:0,e:"«Porém» está intercalado e isolado por vírgulas."},
+{q:"Na ficha: «Os políticos estão cada vez mais ricos, os seus eleitores cada vez mais pobres.» A vírgula separa:",o:["Orações coordenadas assindéticas com contraste","Vocativo","Citação","Aposto"],a:0,e:"Duas orações independentes aparecem justapostas, sem conjunção."},
+{q:"Na ficha: «Certas coisas devem ser bem esclarecidas, sim, para que se tomem decisões certas.»",o:["«Sim» independente/intercalado","Enumeração","Vocativo","Discurso direto"],a:0,e:"«Sim» aparece como elemento independente e é separado por vírgulas."},
+{q:"Na ficha: «Amélia, que não se parece em nada com a Amélia da canção, não suportou...»",o:["Oração relativa explicativa","Oração relativa restritiva","Vocativo","Enumeração"],a:0,e:"A oração entre vírgulas acrescenta uma explicação sobre Amélia."},
+{q:"Na ficha: «Ficou doente, creio eu, por conta da chuva...»",o:["Oração intercalada","Aposto enumerativo","Vocativo","Dois-pontos"],a:0,e:"«Creio eu» é uma oração intercalada."},
+{q:"Na ficha: «Enrolando os tapetes usados no evento, reclamava...»",o:["Oração gerundiva inicial","Vocativo","Citação","Enumeração"],a:0,e:"A oração gerundiva vem no início e fica separada por vírgula."}
+];
+const textExercises=[
+{title:"Texto A — notícia e opinião (baseado na ficha)",raw:"Meu amigo lança fora espantosamente o jornal que está lendo e diz Chega houve um acidente de autocarro em Maputo capital de Moçambique um acidente de mina na África do Sul um surto de cólera na Índia você acredita no que os jornais dizem será o mundo assim uma bola confusa onde acontecem unicamente desastres e desgraças não os jornais é que falsificam a imagem do mundo veja por exemplo aqui em um subúrbio um sapateiro matou a mulher que o abandonou eu não afirmo que isso seja mentira mas há que analisar e questionar certas informações",answer:"Meu amigo lança fora, espantosamente, o jornal que está lendo e diz:\n— Chega! Houve um acidente de autocarro em Maputo, capital de Moçambique; um acidente de mina na África do Sul; um surto de cólera na Índia. Você acredita no que os jornais dizem? Será o mundo assim, uma bola confusa onde acontecem unicamente desastres e desgraças?\n— Não. Os jornais é que falsificam a imagem do mundo. Veja, por exemplo, aqui num subúrbio: um sapateiro matou a mulher que o abandonou. Eu não afirmo que isso seja mentira, mas há que analisar e questionar certas informações.",note:"Esta é uma proposta de pontuação possível: a pontuação de um texto literário pode variar conforme a interpretação, a edição e a organização do diálogo."},
+{title:"Texto B — diálogo da mãe e do filho",raw:"quando a mãe chegou à casa viu que o João tinha acabado um bolo de chocolate então chamou o filho e disse-lhe será possível que tenhas comido o bolo sem pensar no teu irmão respondeu o rapaz estive a pensar nele mamã estava com tanto medo que ele aparecesse antes de eu o acabar",answer:"Quando a mãe chegou a casa, viu que o João tinha acabado um bolo de chocolate. Então, chamou o filho e disse-lhe:\n— Será possível que tenhas comido o bolo sem pensar no teu irmão?\nRespondeu o rapaz:\n— Estive a pensar nele, mamã. Estava com tanto medo que ele aparecesse antes de eu o acabar.",note:"É uma versão possível; a ficha não fornece uma única resposta oficial, e a disposição do discurso direto pode variar."},
+{title:"Texto C — mensagem misteriosa",raw:"não me perguntes quem sou disse logo o viajante enquanto no seu rosto um sorriso se misturava com o evidente cansaço resultante de várias horas de viagem basta que tomes conhecimento da mensagem que trago para ti podes falar replicou Jonas com tranquilidade que mensagem é essa e quem é que a envia a mensagem que trago não deve ser conhecida por mais ninguém além de ti enquanto dizia essas palavras o viajante olhava a sua volta com evidente desconfiança Jonas reparou em que o homem tinha uma cicatriz profunda no braço direito acima do cotovelo para o sossegar disse não há ninguém por perto podes falar à vontade então o homem disse simplesmente aquele que me enviou espera-te amanhã na caverna das sete noites pediu-me que te entregasse isto e lentamente tirou da bolsa um anel que colocou na mão de Jonas",answer:"— Não me perguntes quem sou — disse logo o viajante, enquanto no seu rosto um sorriso se misturava com o evidente cansaço resultante de várias horas de viagem. — Basta que tomes conhecimento da mensagem que trago para ti.\n— Podes falar — replicou Jonas com tranquilidade. — Que mensagem é essa e quem é que a envia?\n— A mensagem que trago não deve ser conhecida por mais ninguém além de ti.\nEnquanto dizia essas palavras, o viajante olhava à sua volta com evidente desconfiança. Jonas reparou que o homem tinha uma cicatriz profunda no braço direito, acima do cotovelo. Para o sossegar, disse:\n— Não há ninguém por perto. Podes falar à vontade.\nEntão, o homem disse simplesmente:\n— Aquele que me enviou espera-te amanhã na Caverna das Sete Noites. Pediu-me que te entregasse isto.\nE, lentamente, tirou da bolsa um anel que colocou na mão de Jonas.",note:"Versão editorial possível. A pontuação do diálogo pode ser organizada de formas diferentes, desde que as falas e a sintaxe fiquem claras."}
+];
+const accentQuestions=[
+{q:"Qual afirmação sobre as proparoxítonas está correta?",o:["Nunca levam acento","Todas são acentuadas","Só levam acento quando terminam em vogal","Só levam acento se forem nomes próprios"],a:1,e:"Todas as proparoxítonas, cuja sílaba tónica é a antepenúltima, são acentuadas: lâmpada, método, África."},
+{q:"Qual destas palavras é oxítona?",o:["Árvore","Fóssil","Café","Lâmpada"],a:2,e:"Café tem a sílaba tónica na última sílaba. Árvore é proparoxítona; fóssil é paroxítona; lâmpada é proparoxítona."},
+{q:"Qual palavra está corretamente acentuada na ortografia atual?",o:["Bóia","Boia","Bôia","Bóiá"],a:1,e:"A forma atual é boia, sem acento, de acordo com o Acordo Ortográfico."},
+{q:"Por que razão se acentua «saída»?",o:["É proparoxítona","Tem um hiato com i tónico","É oxítona terminada em a","Todas as palavras com i levam acento"],a:1,e:"O i tónico forma hiato com a vogal anterior e fica sozinho na sílaba: sa-í-da."},
+{q:"Qual grupo contém apenas proparoxítonas?",o:["Óculos, pêssego, próximo","Café, herói, armazém","Fácil, tórax, álbum","Pá, pé, céu"],a:0,e:"Ó-cu-los, pês-se-go e pró-xi-mo têm a sílaba tónica na antepenúltima e todas levam acento."},
+{q:"Qual par está corretamente escrito?",o:["ideía — assembléia","ideia — assembleia","idéia — assembléia","idéia — assembleia"],a:1,e:"Na ortografia atual, ideia e assembleia escrevem-se sem acento."},
+{q:"Qual destas palavras é paroxítona?",o:["Jiló","Cajá","Fóssil","Pássaro"],a:2,e:"Fóssil tem a sílaba tónica na penúltima sílaba. Jiló e cajá são oxítonas; pássaro é proparoxítona."},
+{q:"Qual opção apresenta uma palavra acentuada por ser oxítona terminada em «em» ou «ens»?",o:["Álbum","Parabéns","Fácil","Método"],a:1,e:"Parabéns é oxítona terminada em -ens. Álbum e fácil são paroxítonas; método é proparoxítona."},
+{q:"Escolhe a forma correta segundo a ortografia atual.",o:["Vôo","Voô","Voo","Vóo"],a:2,e:"Voo perdeu o acento circunflexo com o Acordo Ortográfico."},
+{q:"Qual par ilustra corretamente a diferença entre uma palavra sem acento e outra com acento no plural?",o:["raiz — raízes","café — cafés","pá — pás","jiló — jilós"],a:0,e:"Raiz não leva acento; raízes leva acento no i tónico que forma hiato."},
+{q:"Qual é a classificação de «tórax»?",o:["Oxítona","Paroxítona","Proparoxítona","Monossílabo tónico"],a:1,e:"Tó-rax tem a sílaba tónica na penúltima sílaba e termina em x, uma terminação típica de paroxítonas acentuadas."},
+{q:"Qual conjunto tem apenas monossílabos tônicos acentuados?",o:["pá, pé, céu","de, me, se","casa, livro, mesa","café, armazém, papel"],a:0,e:"Pá, pé e céu são monossílabos tônicos que seguem regras de acentuação."},
+{q:"Qual afirmação está correta?",o:["Todas as oxítonas levam acento","Todas as paroxítonas levam acento","Todas as proparoxítonas levam acento","Nenhuma palavra terminada em -l leva acento"],a:2,e:"A regra geral é que todas as proparoxítonas são acentuadas. Nem todas as oxítonas ou paroxítonas levam acento."},
+{q:"Qual palavra precisa de acento para indicar o hiato?",o:["Saude","Canoa","Homens","Urubu"],a:0,e:"A forma correta é saúde: sa-ú-de, com u tónico a formar hiato."},
+{q:"Qual alternativa contém apenas palavras proparoxítonas?",o:["Lâmpada, método, África","Álbum, fácil, possível","Herói, café, bambu","Pá, réis, céu"],a:0,e:"Lâmpada, método e África têm a sílaba tónica na antepenúltima sílaba."},
+{q:"Qual par mantém acento diferencial na norma atual?",o:["ideia / assembléia","pôde / pode","voo / vôo","boia / bóia"],a:1,e:"Pôde (passado) e pode (presente) distinguem-se pelo acento diferencial."}
+];
+let accentIndex=0,accentAttempts=0,accentCorrect=0;
+function renderAccentQuestion(){const q=accentQuestions[accentIndex%accentQuestions.length];document.getElementById("accentProgress").style.width=((accentIndex+1)/accentQuestions.length*100)+"%";document.getElementById("accentQuizArea").innerHTML=`<div class="small">Questão ${accentIndex+1} de ${accentQuestions.length}</div><div class="question"><div class="qtitle">${q.q}</div><div class="options">${q.o.map((o,i)=>`<label class="option"><input type="radio" name="accentAnswer" value="${i}"><span><b>${String.fromCharCode(65+i)}.</b> ${o}</span></label>`).join("")}</div></div>`;let f=document.getElementById("accentFeedback");f.style.display="none";f.className="feedback"}
+function checkAccentAnswer(){const q=accentQuestions[accentIndex%accentQuestions.length],s=document.querySelector('input[name="accentAnswer"]:checked'),f=document.getElementById("accentFeedback");if(!s){f.textContent="Seleciona uma resposta antes de corrigir.";f.className="feedback bad";f.style.display="block";return}const ok=+s.value===q.a;accentAttempts++;if(ok)accentCorrect++;f.textContent=(ok?"Correto. ":"Resposta correta: "+q.o[q.a]+". ")+q.e+` Resultado de acentuação: ${accentCorrect}/${accentAttempts} (${Math.round(accentCorrect/accentAttempts*100)}%).`;f.className="feedback "+(ok?"good":"bad");f.style.display="block";}
+let activeLesson="ponto",activeTab="learn",qIndex=0,quizSet=[...sourceExercises,...questions],correct=0,attempts=0,history=[];
+function renderLesson(id){activeLesson=id;document.querySelectorAll(".sidebtn").forEach(b=>b.classList.toggle("active",b.dataset.lesson===id));let x=lessons[id];document.getElementById("lessonContent").innerHTML=`<h2>${x.title}</h2><p>${x.intro}</p>${x.rules.map(r=>`<div class="lesson"><strong>${r[0]}</strong><div>${r[1]}</div></div>`).join("")}<div class="example"><strong>Dica de prova</strong><br>${x.tip}</div><div class="actions"><button class="primary" onclick="switchTab('practice')">Praticar esta matéria →</button></div>`}
+function switchTab(tab){activeTab=tab;document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));["learn","accent","practice","text","challenge","review"].forEach(t=>document.getElementById(t+"Panel").classList.toggle("hidden",t!==tab));document.getElementById("side").classList.toggle("hidden",tab!=="learn");if(tab==="accent")renderAccentQuestion();if(tab==="practice")renderQuestion();if(tab==="text")renderTexts();if(tab==="challenge")renderChallenge();if(tab==="review")renderReview()}
+function filteredQuestions(){let v=document.getElementById("levelSelect").value;return quizSet.filter(q=>v==="all"||q.l===v)}
+function renderQuestion(){let arr=filteredQuestions();if(!arr.length){document.getElementById("quizArea").innerHTML="<p>Sem questões neste nível.</p>";return}qIndex=((qIndex%arr.length)+arr.length)%arr.length;let q=arr[qIndex];document.getElementById("progressBar").style.width=((qIndex+1)/arr.length*100)+"%";document.getElementById("quizArea").innerHTML=`<div class="small">Questão ${qIndex+1} de ${arr.length} • ${q.l||"Ficha original"}</div><div class="question"><div class="qtitle">${q.q}</div><div class="options">${q.o.map((o,i)=>`<label class="option"><input type="radio" name="answer" value="${i}"><span><b>${String.fromCharCode(65+i)}.</b> ${o}</span></label>`).join("")}</div></div>`;document.getElementById("quizFeedback").className="feedback";document.getElementById("quizFeedback").style.display="none"}
+function checkAnswer(){let arr=filteredQuestions(),q=arr[qIndex],sel=document.querySelector('input[name="answer"]:checked');if(!sel){showFeedback("Escolhe uma opção antes de corrigir.","bad");return}let chosen=+sel.value,ok=chosen===q.a;attempts++;if(ok)correct++;history.push({q:q.q,chosen:q.o[chosen],right:q.o[q.a],ok,explanation:q.e});updateStats();showFeedback((ok?"Correto! ":"Ainda não. Resposta correta: "+String.fromCharCode(65+q.a)+". "+q.o[q.a]+". ")+q.e,ok?"good":"bad")}
+function showFeedback(msg,cls){let f=document.getElementById("quizFeedback");f.textContent=msg;f.className="feedback "+cls;f.style.display="block"}
+function updateStats(){document.getElementById("doneStat").textContent=attempts;document.getElementById("scoreStat").textContent=attempts?Math.round(correct/attempts*100)+"%":"0%";let p=attempts?correct/attempts:0;document.getElementById("levelStat").textContent=attempts===0?"Básico":p>=.85?"Avançado":p>=.65?"Intermédio":"Em treino"}
+function renderTexts(){document.getElementById("textExercises").innerHTML=textExercises.map((t,i)=>`<div class="question"><h3>${t.title}</h3><p class="muted">Texto sem pontuação:</p><div class="example">${t.raw}</div><button class="secondary" onclick="document.getElementById('textAnswer${i}').classList.toggle('hidden')">Mostrar uma solução possível</button><div id="textAnswer${i}" class="hidden"><div class="lesson"><strong>Versão pontuada</strong><p style="white-space:pre-line">${t.answer}</p></div><p class="small">${t.note}</p></div></div>`).join("")}
+function renderChallenge(){let arr=questions.filter(q=>q.l==="Universitário");document.getElementById("challengeArea").innerHTML=arr.map((q,i)=>`<div class="question"><div class="qtitle">${i+1}. ${q.q}</div><div class="options">${q.o.map((o,j)=>`<label class="option"><input type="radio" name="challenge${i}" value="${j}"><span>${String.fromCharCode(65+j)}. ${o}</span></label>`).join("")}</div><button class="secondary" onclick="checkChallenge(${i})">Corrigir</button><div id="chfb${i}" class="feedback"></div></div>`).join("")}
+function checkChallenge(i){let arr=questions.filter(q=>q.l==="Universitário"),q=arr[i],s=document.querySelector(`input[name="challenge${i}"]:checked`);if(!s){let f=document.getElementById("chfb"+i);f.textContent="Escolhe uma opção.";f.className="feedback bad";f.style.display="block";return}let ok=+s.value===q.a;attempts++;if(ok)correct++;history.push({q:q.q,chosen:q.o[+s.value],right:q.o[q.a],ok,explanation:q.e});updateStats();let f=document.getElementById("chfb"+i);f.textContent=(ok?"Correto! ":"Resposta correta: "+q.o[q.a]+". ")+q.e;f.className="feedback "+(ok?"good":"bad");f.style.display="block"}
+function renderReview(){let el=document.getElementById("reviewContent");if(!history.length){el.innerHTML='<p class="muted">Ainda não corrigiste nenhuma questão. Vai a Exercícios para começar.</p>';return}el.innerHTML=`<h3>${correct} corretas em ${attempts} tentativas (${Math.round(correct/attempts*100)}%)</h3><div class="progress"><div style="width:${correct/attempts*100}%"></div></div>`+history.slice().reverse().map((h,i)=>`<div class="review-item"><b>${h.ok?"CORRETA":"INCORRETA"} ${h.q}</b><p class="small">A tua resposta: ${h.chosen}<br>Resposta correta: ${h.right}<br>${h.explanation}</p></div>`).join("")}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
+document.querySelectorAll(".sidebtn").forEach(b=>b.addEventListener("click",()=>renderLesson(b.dataset.lesson)));
+document.getElementById("checkBtn").addEventListener("click",checkAnswer);
+document.getElementById("accentCheckBtn").addEventListener("click",checkAccentAnswer);
+document.getElementById("accentNextBtn").addEventListener("click",()=>{accentIndex=(accentIndex+1)%accentQuestions.length;renderAccentQuestion()});
+document.getElementById("nextBtn").addEventListener("click",()=>{qIndex++;renderQuestion()});
+document.getElementById("shuffleBtn").addEventListener("click",()=>{quizSet.sort(()=>Math.random()-.5);qIndex=0;renderQuestion()});
+document.getElementById("levelSelect").addEventListener("change",()=>{qIndex=0;renderQuestion()});
+document.getElementById("resetBtn").addEventListener("click",()=>{correct=0;attempts=0;history=[];updateStats();renderReview()});
+renderLesson("ponto");renderQuestion();
+</script>
+</body></html>
